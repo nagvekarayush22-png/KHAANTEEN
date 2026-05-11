@@ -68,17 +68,17 @@ export const StudentDashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-gray-950 relative overflow-hidden transition-colors duration-500">
+    <div className="flex min-h-screen bg-white relative overflow-hidden transition-colors duration-500">
       {/* Background Subtle Pattern/Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-[0.03] dark:opacity-[0.08] scale-110"
+        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-[0.03] scale-110"
         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=2836&auto=format&fit=crop')" }}
       />
       
       {/* Sidebar - Desktop Focus */}
-      <aside className="hidden md:flex w-20 lg:w-24 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800 flex-col items-center py-6 fixed left-0 top-0 bottom-0 z-50 transition-colors duration-500">
+      <aside className="hidden md:flex w-20 lg:w-24 bg-white border-r border-gray-100 flex-col items-center py-6 fixed left-0 top-0 bottom-0 z-50 transition-colors duration-500">
         <Link to="/" className="w-16 h-16 mb-8 group transition-transform hover:scale-110 flex items-center justify-center">
-          <Logo showText={false} isDark={theme === 'dark'} className="scale-75" />
+          <Logo showText={false} className="scale-75" />
         </Link>
         
         <nav className="flex flex-col gap-4">
@@ -95,8 +95,8 @@ export const StudentDashboard: React.FC = () => {
               className={cn(
                 "p-3 rounded-xl transition-all group relative",
                 item.active 
-                  ? "bg-[#E31E24] text-white shadow-lg shadow-red-500/20" 
-                  : "text-gray-300 dark:text-gray-600 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800"
+                  ? "bg-brand-orange text-white shadow-lg shadow-orange-500/20" 
+                  : "text-gray-400 hover:text-gray-900 hover:bg-gray-50"
               )}
             >
               {item.icon}
@@ -104,22 +104,25 @@ export const StudentDashboard: React.FC = () => {
           ))}
         </nav>
 
-        <div className="mt-auto flex flex-col gap-4">
+        <div className="mt-auto pt-4 border-t border-gray-100">
            <button 
              onClick={handleLogout}
-             title="Logout"
-             className="p-3 rounded-xl text-gray-300 dark:text-gray-600 hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-500/10 transition-all"
+             className="group w-full flex items-center gap-3 p-2 bg-gray-50 hover:bg-white rounded-3xl border border-transparent hover:border-gray-100 transition-all shadow-sm hover:shadow-xl group"
            >
-              <LogOut size={20} />
+              <div className="w-10 h-10 rounded-2xl bg-orange-100 border-2 border-white overflow-hidden flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                 <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt="Profile" className="w-full h-full object-cover" />
+              </div>
+              <div className="hidden lg:block text-left overflow-hidden">
+                 <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest truncate">User</p>
+                 <p className="text-[8px] font-bold text-gray-400 uppercase truncate">Sign Out</p>
+              </div>
+              <LogOut size={14} className="hidden lg:block ml-auto mr-2 text-gray-300 group-hover:text-brand-orange transition-colors" />
            </button>
-           <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-gray-800 border-2 border-white dark:border-gray-800 shadow-sm overflow-hidden flex items-center justify-center">
-              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt="Profile" className="w-full h-full object-cover" />
-           </div>
         </div>
       </aside>
 
       {/* Bottom Navigation - Mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-t border-gray-100 dark:border-gray-800 z-50 flex items-center justify-around px-6">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-xl border-t border-gray-100 z-50 flex items-center justify-around px-6">
         {[
           { icon: <LayoutDashboard size={20} />, path: "/student-dashboard", active: true },
           { icon: <ShoppingBag size={20} />, path: "/menu", active: false },
@@ -132,7 +135,7 @@ export const StudentDashboard: React.FC = () => {
             to={item.path}
             className={cn(
               "flex flex-col items-center gap-1 p-2 transition-all",
-              item.active ? "text-[#E31E24]" : "text-gray-300 dark:text-gray-600"
+              item.active ? "text-brand-orange" : "text-gray-300"
             )}
           >
             {item.icon}
@@ -147,7 +150,7 @@ export const StudentDashboard: React.FC = () => {
               <motion.h1 
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="text-xl sm:text-2xl md:text-3xl font-display font-black text-gray-900 dark:text-white tracking-tight truncate"
+                className="text-xl sm:text-2xl md:text-3xl font-display font-black text-gray-900 tracking-tight truncate"
               >
                 Canteen Dashboard
               </motion.h1>
@@ -157,42 +160,39 @@ export const StudentDashboard: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-3 w-full sm:w-auto">
-             <Link to="/menu" className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-[#E31E24] text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-red-500/20 hover:scale-105 transition-all">
+             <Link to="/menu" className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-brand-orange text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-orange-500/20 hover:scale-105 transition-all">
                 <ShoppingBag size={18} />
                 <span className="whitespace-nowrap">Explore Menu</span>
              </Link>
-             <button onClick={toggleTheme} className="p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl text-gray-400 shadow-sm transition-colors">
-                <Bell size={20} />
-             </button>
           </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
            <div className="lg:col-span-8 space-y-6 sm:space-y-8 relative">
               {/* Subtle Background Glow for Main Content */}
-              <div className="absolute -top-20 -left-20 w-64 h-64 bg-brand-red/5 blur-[120px] rounded-full pointer-events-none" />
-              <div className="absolute top-1/2 -right-20 w-80 h-80 bg-brand-azure/5 blur-[150px] rounded-full pointer-events-none" />
+              <div className="absolute -top-20 -left-20 w-64 h-64 bg-orange-50 blur-[120px] rounded-full pointer-events-none" />
+              <div className="absolute top-1/2 -right-20 w-80 h-80 bg-orange-50 blur-[150px] rounded-full pointer-events-none" />
 
               {/* Analytics Summary */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
                  {[
-                   { label: "Wallet", value: 540, icon: <Wallet />, color: "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400" },
-                   { label: "Rewards", value: 1245, icon: <Star />, color: "bg-yellow-50 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400" },
-                   { label: "Orders", value: 42, icon: <ShoppingBag />, color: "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400" },
-                   { label: "XP", value: 890, icon: <Gift />, color: "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-400" }
+                   { label: "Wallet", value: 540, icon: <Wallet />, color: "bg-blue-50 text-blue-600" },
+                   { label: "Rewards", value: 1245, icon: <Star />, color: "bg-yellow-50 text-yellow-600" },
+                   { label: "Orders", value: 42, icon: <ShoppingBag />, color: "bg-red-50 text-red-600" },
+                   { label: "XP", value: 890, icon: <Gift />, color: "bg-purple-50 text-purple-600" }
                  ].map((stat, i) => (
                    <motion.div 
                      key={i}
                      initial={{ opacity: 0, scale: 0.9 }}
                      animate={{ opacity: 1, scale: 1 }}
                      transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
-                     className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl p-6 rounded-[32px] border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col items-center text-center group hover:scale-[1.05] hover:shadow-xl hover:shadow-gray-200/20 dark:hover:shadow-black/20 transition-all cursor-pointer"
+                     className="bg-white/80 backdrop-blur-xl p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col items-center text-center group hover:scale-[1.05] hover:shadow-xl hover:shadow-gray-200/20 transition-all cursor-pointer"
                    >
                      <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:rotate-12 transition-transform", stat.color)}>
                         {React.cloneElement(stat.icon as React.ReactElement, { size: 20 })}
                      </div>
                      <span className="text-[10px] font-black uppercase text-gray-400 tracking-[0.2em] mb-1">{stat.label}</span>
-                     <p className="text-2xl font-display font-black text-gray-900 dark:text-white">
+                     <p className="text-2xl font-display font-black text-gray-900">
                         {stat.label === "Wallet" && "₹"}<Counter value={stat.value} />
                      </p>
                    </motion.div>
@@ -217,9 +217,9 @@ export const StudentDashboard: React.FC = () => {
                                 <motion.span 
                                   animate={{ opacity: [1, 0.4, 1] }} 
                                   transition={{ duration: 2, repeat: Infinity }}
-                                  className="w-2.5 h-2.5 bg-[#E31E24] rounded-full" 
+                                  className="w-2.5 h-2.5 bg-blue-500 rounded-full" 
                                 />
-                                <span className="text-[10px] font-black text-[#E31E24] uppercase tracking-widest">Chef is Preparing your Meal</span>
+                                <span className="text-[10px] font-black text-[#007AFF] uppercase tracking-widest">Chef is Preparing your Meal</span>
                              </div>
                           </div>
                        </div>
@@ -236,7 +236,7 @@ export const StudentDashboard: React.FC = () => {
                        <motion.div 
                           initial={{ width: "0%" }} 
                           animate={{ width: "65%" }} 
-                          className="h-full bg-gradient-to-r from-[#E31E24] to-[#8B0000] rounded-full relative"
+                          className="h-full bg-gradient-to-r from-[#E31E24] via-[#007AFF] to-[#01D2FF] rounded-full relative"
                        >
                           <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full m-0.5 shadow-sm" />
                        </motion.div>
@@ -252,7 +252,7 @@ export const StudentDashboard: React.FC = () => {
                             <p className="text-sm font-bold text-gray-900 dark:text-white truncate">Masala Chai + Samosa (2pcs)</p>
                           </div>
                        </div>
-                       <button className="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-[10px] font-black text-[#E31E24] uppercase tracking-widest rounded-2xl flex items-center gap-2 self-end sm:self-auto hover:bg-[#E31E24] hover:text-white transition-all shadow-sm">
+                       <button className="px-6 py-3 bg-gray-50 dark:bg-gray-800 text-[10px] font-black text-[#007AFF] uppercase tracking-widest rounded-2xl flex items-center gap-2 self-end sm:self-auto hover:bg-[#007AFF] hover:text-white transition-all shadow-sm">
                          Real-time Track <ChevronRight size={14} />
                        </button>
                     </div>
@@ -326,68 +326,69 @@ export const StudentDashboard: React.FC = () => {
 
            <div className="lg:col-span-4 space-y-8">
               {/* Wallet Card */}
-              <div className="bg-[#0A0A0A] rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl shadow-black/20 group">
+              <div className="bg-[#0A0A0A] dark:bg-gray-900 rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl shadow-black/20 group">
                  <div className="relative z-10">
                     <div className="flex justify-between items-start mb-12">
                        <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center backdrop-blur-md group-hover:scale-110 transition-transform">
-                          <CreditCard size={28} className="text-[#E31E24]" />
+                          <CreditCard size={28} className="text-[#007AFF]" />
                        </div>
                        <div className="text-right">
                           <span className="block text-[8px] font-black uppercase tracking-[0.2em] opacity-40">Active Balance</span>
-                          <span className="text-xs font-black text-[#E31E24]">PU-GOA PAY</span>
+                          <span className="text-xs font-black text-[#007AFF]">PU-GOA PAY</span>
                        </div>
                     </div>
                     
                     <h4 className="text-gray-500 text-[10px] font-black uppercase tracking-[0.4em] mb-2">Personal Funds</h4>
                     <div className="flex items-end gap-2 mb-8">
                        <span className="text-4xl sm:text-5xl font-display font-black tracking-tighter">₹540.00</span>
-                       <span className="text-xs font-black text-red-500 mb-2 truncate">+12% Energy</span>
+                       <span className="text-xs font-black text-green-400 mb-2">+12%</span>
                     </div>
 
-                    <button className="relative w-full py-5 bg-[#E31E24] text-white rounded-[28px] font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-red-500/40 overflow-hidden group active:scale-95 transition-all">
+                    <button className="relative w-full py-5 bg-[#E31E24] text-white rounded-[28px] font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-red-500/40 overflow-hidden group">
                        <span className="relative z-10 flex items-center justify-center gap-2">
                           Quick Recharge 
                           <ArrowRight size={16} />
                        </span>
+                       <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                     </button>
                  </div>
-                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-600/10 blur-[100px] rounded-full" />
+                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full" />
                  <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-600/5 blur-[80px] rounded-full" />
               </div>
 
               {/* Reward Points */}
-              <div className="bg-white dark:bg-gray-900 rounded-[40px] p-8 border border-gray-50 dark:border-gray-800 shadow-2xl shadow-gray-200/50 dark:shadow-black/10 transition-all hover:border-[#E31E24]/20">
+              <div className="bg-white dark:bg-gray-900 rounded-[40px] p-8 border border-gray-50 dark:border-gray-800 shadow-2xl shadow-gray-200/50 dark:shadow-black/10 transition-all hover:border-[#FACC15]/20">
                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-red-50 dark:bg-red-900/10 flex items-center justify-center text-[#E31E24]">
-                       <Star size={24} className="fill-[#E31E24]" />
+                    <div className="w-12 h-12 rounded-2xl bg-yellow-50 dark:bg-yellow-900/10 flex items-center justify-center text-yellow-500">
+                       <Star size={24} className="fill-yellow-500" />
                     </div>
                     <div>
                        <h4 className="font-display font-black text-gray-900 dark:text-white uppercase tracking-tighter">Elite Points</h4>
-                       <span className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Lv. 4 Platinum Member</span>
+                       <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Lv. 4 Silver Member</span>
                     </div>
                  </div>
                  <div className="flex justify-between items-end mb-3">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Next Reward in <span className="text-[#E31E24]">255 pts</span></span>
-                    <span className="text-xs font-black text-[#E31E24]">75%</span>
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Next Reward in <span className="text-gray-900 dark:text-white">255 pts</span></span>
+                    <span className="text-xs font-black text-yellow-600">75%</span>
                  </div>
                  <div className="h-2 bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden border border-gray-100 dark:border-gray-700">
                     <motion.div 
                       initial={{ width: 0 }} 
                       animate={{ width: "75%" }} 
-                      className="h-full bg-gradient-to-r from-[#E31E24] to-[#8B0000]" 
+                      className="h-full bg-gradient-to-r from-yellow-400 to-yellow-600" 
                     />
                  </div>
               </div>
 
               {/* Smart AI Rec */}
-              <div className="bg-[#E31E24] rounded-[40px] p-8 text-white shadow-2xl shadow-red-500/40 relative overflow-hidden group">
+              <div className="bg-[#007AFF] rounded-[40px] p-8 text-white shadow-2xl shadow-blue-500/40 relative overflow-hidden group">
                  <Zap className="mb-6 animate-pulse text-white group-hover:scale-110 transition-transform" />
-                 <h4 className="font-display font-black text-3xl mb-3 tracking-tighter uppercase leading-none">AI Insight: <br /> <span className="text-white/80">Rush Hour Alert</span></h4>
-                 <p className="text-white/70 text-xs mb-8 font-medium leading-relaxed">
-                    Student flux is peaking. Smart queues are active. Book your "Masala Chai" now for priority pickup.
+                 <h4 className="font-display font-black text-3xl mb-3 tracking-tighter uppercase leading-none">AI Insight: <br /> <span className="text-blue-100">Midnight Snack?</span></h4>
+                 <p className="text-blue-100/70 text-xs mb-8 font-medium leading-relaxed">
+                    Orders for "Samosa" peak in 10 mins. Order now to skip the rush.
                  </p>
-                 <Link to="/menu" className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#E31E24] rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-gray-50 transition-all active:scale-95">
-                    Secure Order
+                 <Link to="/menu" className="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#007AFF] rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl hover:bg-blue-50 transition-all active:scale-95">
+                    Pre-Order Now
                     <ArrowRight size={16} />
                  </Link>
                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-3xl rounded-full" />

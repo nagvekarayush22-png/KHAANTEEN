@@ -7,9 +7,9 @@ const features = [
   {
     title: "AI Meal Recommendations",
     description: "Personalized suggestions based on your health goals and past ordering habits.",
-    icon: <Brain className="text-[#E31E24]" />,
-    color: "bg-red-50",
-    glow: "shadow-red-500/10"
+    icon: <Brain className="text-brand-neon-blue" />,
+    color: "bg-blue-50",
+    glow: "shadow-blue-500/20"
   },
   {
     title: "Live Queue Tracking",
@@ -54,7 +54,7 @@ export const SmartFeatures: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="text-5xl md:text-7xl font-display font-black text-gray-900 mb-8 tracking-tighter"
         >
-          Intelligent <span className="text-[#E31E24]">E-Canteen</span> Solutions.
+          Intelligent <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E31E24] to-[#007AFF]">E-Canteen</span> Solutions.
         </motion.h1>
         
         <motion.p
@@ -112,14 +112,14 @@ export const SmartFeatures: React.FC = () => {
       <section className="max-w-7xl mx-auto px-6 mb-32">
         <div className="bg-gray-900 rounded-[60px] p-8 md:p-20 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24] via-transparent to-[#8B0000]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24] via-transparent to-[#007AFF]" />
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full mb-8 border border-white/10">
-                <Cpu size={14} className="text-[#E31E24]" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#E31E24]">Advanced Architecture</span>
+                <Cpu size={14} className="text-[#007AFF]" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#007AFF]">Advanced Architecture</span>
               </div>
               
               <h2 className="text-4xl md:text-5xl font-display font-black text-white mb-8 tracking-tight">

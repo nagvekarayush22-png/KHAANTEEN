@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { 
     LayoutDashboard, Users, ShoppingBag, BarChart3, Settings, 
@@ -6,6 +6,7 @@ import {
     TrendingUp, DollarSign, Package, Monitor, Plus, Minus, Trash2, User,
     Filter, ArrowUpDown, LogOut
 } from "lucide-react";
+import { io } from "socket.io-client";
 import { 
     AreaChart, Area, XAxis, YAxis, CartesianGrid, 
     Tooltip, ResponsiveContainer, BarChart, Bar 
@@ -15,6 +16,7 @@ import { cn } from "../lib/utils";
 import { MENU_ITEMS, FOOD_CATEGORIES } from "../constants";
 import { FoodItem } from "../types";
 import { Link, useNavigate } from "react-router-dom";
+import { Logo } from "../components/Logo";
 
 const data = [
   { name: "8:00", sales: 120, orders: 45 },
@@ -39,19 +41,39 @@ export const AdminDashboard: React.FC = () => {
   };
 
   // Order History State
+  const [orders, setOrders] = useState<any[]>([]);
   const [orderSearchQuery, setOrderSearchQuery] = useState("");
   const [orderStatusFilter, setOrderStatusFilter] = useState("All");
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
 
-  const PAST_ORDERS = [
-    { id: '#9921', studentName: 'Ayush N.', items: 'Cheese Maggi, Cold Coffee', total: 180, status: 'Completed', date: '2024-05-11 10:30 AM' },
-    { id: '#9920', studentName: 'Rohan S.', items: 'Masala Rice', total: 120, status: 'Processing', date: '2024-05-11 10:25 AM' },
-    { id: '#9919', studentName: 'Priya P.', items: 'Paneer Pulao, Lime Soda', total: 210, status: 'Completed', date: '2024-05-11 10:15 AM' },
-    { id: '#9918', studentName: 'Amit K.', items: 'Veg Grill Sandwich', total: 85, status: 'Cancelled', date: '2024-05-11 10:00 AM' },
-    { id: '#9917', studentName: 'Sanya M.', items: 'Cold Coffee, Samosa', total: 105, status: 'Completed', date: '2024-05-11 09:45 AM' },
-    { id: '#9916', studentName: 'Vikram J.', items: 'Masala Dosa', total: 90, status: 'Completed', date: '2024-05-11 09:30 AM' },
-    { id: '#9915', studentName: 'Neha T.', items: 'Vada Pav, Tea', total: 45, status: 'Completed', date: '2024-05-11 09:15 AM' },
-  ];
+  useEffect(() => {
+    // Fetch initial orders
+    fetch('/api/orders')
+      .then(res => res.json())
+      .then(data => setOrders(data));
+
+    // Connect socket
+    const socket = io();
+
+    socket.on('orderUpdated', (updatedOrder) => {
+      setOrders(prev => {
+        const existingOrderIndex = prev.findIndex(o => o.id === updatedOrder.id);
+        if (existingOrderIndex !== -1) {
+          // Update existing
+          const newOrders = [...prev];
+          newOrders[existingOrderIndex] = updatedOrder;
+          return newOrders;
+        } else {
+          // Add new
+          return [...prev, updatedOrder];
+        }
+      });
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const handleSort = (key: string) => {
     let direction: 'asc' | 'desc' = 'asc';
@@ -61,9 +83,9 @@ export const AdminDashboard: React.FC = () => {
     setSortConfig({ key, direction });
   };
 
-  const filteredOrders = PAST_ORDERS.filter(order => {
-    const matchesSearch = order.studentName.toLowerCase().includes(orderSearchQuery.toLowerCase()) || 
-                          order.id.toLowerCase().includes(orderSearchQuery.toLowerCase());
+  const filteredOrders = orders.filter(order => {
+    const matchesSearch = (order.studentName?.toLowerCase().includes(orderSearchQuery.toLowerCase()) || 
+                           order.id.toLowerCase().includes(orderSearchQuery.toLowerCase()));
     const matchesStatus = orderStatusFilter === "All" || order.status === orderStatusFilter;
     return matchesSearch && matchesStatus;
   }).sort((a, b) => {
@@ -113,17 +135,20 @@ export const AdminDashboard: React.FC = () => {
 
   const stats = [
     { label: "Daily Revenue", value: "₹42,850", change: "+12.5%", icon: <DollarSign size={20} className="text-green-500" />, trend: "up" },
-    { label: "Active Orders", value: "24", change: "+4", icon: <ShoppingBag size={20} className="text-red-500" />, trend: "up" },
+    { label: "Active Orders", value: "24", change: "+4", icon: <ShoppingBag size={20} className="text-blue-500" />, trend: "up" },
     { label: "Total Students", value: "1,450", change: "+2%", icon: <Users size={20} className="text-orange-500" />, trend: "up" },
     { label: "Stock Alerts", value: "8 Low", change: "-2", icon: <Package size={20} className="text-[#E31E24]" />, trend: "down" },
   ];
 
   return (
-    <div className="relative min-h-screen pt-20 md:pt-32 pb-24 px-3 sm:px-6 flex flex-col xl:flex-row gap-6 lg:gap-8 bg-[#F8FAFC]">
+    <div className="relative min-h-screen pt-20 md:pt-32 pb-24 px-3 sm:px-6 flex flex-col xl:flex-row gap-6 lg:gap-8 bg-white">
       
       {/* Sidebar - Management Hub */}
-      <div className="w-full xl:w-20 lg:w-64 flex flex-col gap-6 sticky top-20 md:top-32 h-fit z-40 bg-[#F8FAFC]/80 backdrop-blur-md pt-2 md:pt-0">
-        <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[32px] p-2 md:p-4 flex xl:flex-col gap-2 shadow-xl shadow-gray-200/50 overflow-x-auto xl:overflow-hidden no-scrollbar">
+      <div className="w-full xl:w-20 lg:w-64 flex flex-col gap-6 sticky top-20 md:top-32 h-fit z-40 bg-white/80 backdrop-blur-md pt-2 md:pt-0">
+        <div className="bg-white border border-gray-100 rounded-2xl md:rounded-[32px] p-2 md:p-4 flex xl:flex-col gap-2 shadow-xl shadow-gray-100/50 overflow-x-auto xl:overflow-hidden no-scrollbar">
+            <Link to="/" className="p-4 mb-2 hidden xl:flex items-center justify-center group hover:scale-110 transition-transform">
+                <Logo showText={false} className="scale-75" />
+            </Link>
             {[
                 { id: "overview", icon: <LayoutDashboard size={20} />, label: "Overview" },
                 { id: "pos", icon: <Monitor size={20} />, label: "POS" },
@@ -138,35 +163,41 @@ export const AdminDashboard: React.FC = () => {
                     className={cn(
                         "flex items-center gap-3 md:gap-4 px-4 py-3 md:py-4 rounded-xl md:rounded-2xl transition-all group whitespace-nowrap",
                         activeTab === item.id 
-                            ? "bg-[#010816] text-white shadow-xl" 
-                            : "text-gray-300 hover:text-gray-900 hover:bg-gray-50"
+                            ? "bg-brand-orange text-white shadow-lg shadow-orange-500/20" 
+                            : "text-gray-400 hover:text-gray-900 hover:bg-gray-50"
                     )}
                 >
                     {item.icon}
                     <span className="hidden lg:block xl:hidden min-[1400px]:block text-[10px] font-black uppercase tracking-widest">{item.label}</span>
                 </button>
             ))}
-            <div className="xl:mt-auto pt-2 md:pt-4 border-t xl:border-t-0 border-gray-50 flex xl:flex-col gap-2">
+            <div className="xl:mt-auto pt-4 border-t border-gray-100">
                 <button 
                   onClick={handleLogout}
-                  className="flex items-center gap-3 md:gap-4 px-4 py-3 md:py-4 rounded-xl md:rounded-2xl text-[#E31E24] hover:bg-red-50 transition-all font-black text-[10px] uppercase tracking-widest group whitespace-nowrap text-left w-full"
+                  className="group flex items-center gap-3 md:gap-4 p-2 bg-gray-50 hover:bg-white rounded-[24px] transition-all shadow-sm hover:shadow-xl border border-transparent hover:border-gray-100 w-full"
                 >
-                    <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
-                    <span className="hidden lg:block xl:hidden min-[1400px]:block">Logout</span>
+                    <div className="w-10 h-10 rounded-2xl bg-orange-100 border-2 border-white overflow-hidden flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Admin" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="hidden lg:block xl:hidden min-[1400px]:block text-left overflow-hidden">
+                        <p className="text-[10px] font-black text-gray-900 uppercase tracking-widest truncate">Admin</p>
+                        <p className="text-[8px] font-bold text-gray-400 uppercase truncate">Sign Out</p>
+                    </div>
+                    <LogOut size={14} className="hidden lg:block xl:hidden min-[1400px]:block ml-auto mr-2 text-gray-300 group-hover:text-brand-orange transition-colors" />
                 </button>
             </div>
         </div>
 
-        <div className="bg-white border border-gray-100 rounded-[32px] p-8 hidden lg:block overflow-hidden relative shadow-2xl shadow-gray-200/50">
-            <div className="absolute top-0 right-0 w-20 h-20 bg-red-50/50 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2" />
-            <h4 className="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-6">Critical Stock</h4>
+        <div className="bg-white border border-gray-100 rounded-[32px] p-8 hidden lg:block overflow-hidden relative shadow-xl shadow-gray-100/50">
+            <div className="absolute top-0 right-0 w-20 h-20 bg-orange-50/50 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2" />
+            <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">Critical Stock</h4>
             <div className="space-y-4">
                 <div className="flex justify-between items-center text-[10px] font-black">
                     <span className="text-gray-900 uppercase">Milk Packets</span>
-                    <span className="text-[#E31E24]">12% LEFT</span>
+                    <span className="text-brand-orange">12% LEFT</span>
                 </div>
-                <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden">
-                    <div className="w-[12%] h-full bg-[#E31E24] shadow-[0_0_8px_rgba(227,30,36,0.5)]" />
+                <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="w-[12%] h-full bg-brand-orange" />
                 </div>
             </div>
         </div>
@@ -179,7 +210,7 @@ export const AdminDashboard: React.FC = () => {
                 {/* ... existing POS system view ... */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">POS<br /><span className="text-[#E31E24]">System.</span></h1>
+                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">POS<br /><span className="text-brand-orange">System.</span></h1>
                         <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-2">Direct Terminal Ordering</p>
                     </div>
                 </div>
@@ -194,7 +225,7 @@ export const AdminDashboard: React.FC = () => {
                                     onClick={() => setPosCategory(cat)}
                                     className={cn(
                                         "px-4 py-2.5 sm:py-2 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border",
-                                        posCategory === cat ? "bg-[#010816] border-[#010816] text-white" : "bg-white border-gray-100 text-gray-400 hover:text-gray-900"
+                                        posCategory === cat ? "bg-brand-orange border-brand-orange text-white" : "bg-white border-gray-100 text-gray-400 hover:text-gray-900"
                                     )}
                                 >
                                     {cat}
@@ -204,23 +235,23 @@ export const AdminDashboard: React.FC = () => {
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                             {MENU_ITEMS.filter(item => posCategory === 'All' || item.category === posCategory).map(item => (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => addToPosCart(item)}
-                                        className="bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-gray-100 text-left hover:border-[#E31E24]/30 transition-all group shadow-sm hover:shadow-xl min-w-0"
-                                    >
-                                        <div className="flex justify-between items-start mb-3 sm:mb-4">
-                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-all overflow-hidden border border-gray-100 shrink-0">
-                                                <img src={item.image} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                                            </div>
-                                            <Plus size={14} className="text-gray-200 group-hover:text-[#E31E24]" />
+                                <button
+                                    key={item.id}
+                                    onClick={() => addToPosCart(item)}
+                                    className="bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-gray-100 text-left hover:border-brand-orange/30 transition-all group shadow-sm hover:shadow-xl min-w-0"
+                                >
+                                    <div className="flex justify-between items-start mb-3 sm:mb-4">
+                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-all overflow-hidden border border-gray-100 shrink-0">
+                                            <img src={item.image} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                                         </div>
-                                        <div className="min-w-0">
-                                            <span className="block text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 truncate">{item.category}</span>
-                                            <h4 className="text-xs sm:text-sm font-black text-gray-900 mb-1 truncate leading-tight">{item.name}</h4>
-                                            <span className="text-[#E31E24] font-black text-[10px] sm:text-xs">₹{item.price}</span>
-                                        </div>
-                                    </button>
+                                        <Plus size={14} className="text-gray-200 group-hover:text-brand-orange" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <span className="block text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 truncate">{item.category}</span>
+                                        <h4 className="text-xs sm:text-sm font-black text-gray-900 mb-1 truncate leading-tight">{item.name}</h4>
+                                        <span className="text-brand-orange font-black text-[10px] sm:text-xs">₹{item.price}</span>
+                                    </div>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -248,7 +279,7 @@ export const AdminDashboard: React.FC = () => {
                                         </div>
                                         <div className="flex-1">
                                             <h5 className="text-xs font-black text-gray-900">{item.name}</h5>
-                                            <span className="text-[10px] font-black text-[#E31E24]">₹{item.price} x {quantity}</span>
+                                            <span className="text-[10px] font-black text-brand-orange">₹{item.price} x {quantity}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <button onClick={() => updatePosQty(item.id, -1)} className="p-1 hover:bg-gray-50 rounded-lg text-gray-400"><Minus size={14} /></button>
@@ -268,7 +299,7 @@ export const AdminDashboard: React.FC = () => {
                                     value={studentId}
                                     onChange={(e) => setStudentId(e.target.value)}
                                     placeholder="Enter Student ID..." 
-                                    className="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-black text-gray-900 focus:ring-2 ring-red-100/50" 
+                                    className="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-black text-gray-900 focus:ring-2 ring-[#007AFF]/20" 
                                 />
                             </div>
 
@@ -280,7 +311,7 @@ export const AdminDashboard: React.FC = () => {
                             <button 
                                 onClick={handlePlaceOrder}
                                 disabled={posCart.length === 0}
-                                className="w-full py-5 bg-[#E31E24] text-white rounded-[24px] font-black text-sm uppercase tracking-widest shadow-xl shadow-red-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                                className="w-full py-5 bg-[#007AFF] text-white rounded-[24px] font-black text-sm uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                             >
                                 Confirm & Print Receipt
                             </button>
@@ -292,7 +323,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex flex-col gap-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">Order<br /><span className="text-[#E31E24]">History.</span></h1>
+                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">Order<br /><span className="text-brand-orange">History.</span></h1>
                         <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-2">Comprehensive Record of Sales</p>
                     </div>
                     
@@ -349,7 +380,7 @@ export const AdminDashboard: React.FC = () => {
                                         >
                                             <div className="flex items-center gap-2">
                                                 {col.label}
-                                                <ArrowUpDown size={12} className={cn(sortConfig?.key === col.key ? "text-[#E31E24]" : "text-gray-200")} />
+                                                <ArrowUpDown size={12} className={cn(sortConfig?.key === col.key ? "text-[#007AFF]" : "text-gray-200")} />
                                             </div>
                                         </th>
                                     ))}
@@ -359,10 +390,10 @@ export const AdminDashboard: React.FC = () => {
                                 {filteredOrders.length > 0 ? (
                                     filteredOrders.map((order, i) => (
                                         <tr key={i} className="group hover:bg-gray-50/50 transition-colors">
-                                            <td className="px-8 py-6 font-black text-sm text-[#E31E24]">{order.id}</td>
+                                            <td className="px-8 py-6 font-black text-sm text-[#007AFF]">{order.id}</td>
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center font-black text-[10px] text-[#E31E24] border border-red-100">
+                                                    <div className="w-8 h-8 rounded-full bg-[#007AFF]/5 flex items-center justify-center font-black text-[10px] text-[#007AFF] border border-[#007AFF]/10">
                                                         {order.studentName[0]}
                                                     </div>
                                                     <span className="text-sm font-black text-gray-900">{order.studentName}</span>
@@ -405,21 +436,15 @@ export const AdminDashboard: React.FC = () => {
                 {/* Existing Overview Content */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div className="flex items-center gap-4">
-                        <img 
-                          src="https://storage.googleapis.com/static.aistudio.google.com/artifacts/ef9231f8-084a-49ae-a01f-0e1ce0743bba/input_file_0.png" 
-                          alt="" 
-                          className="md:hidden h-14 w-auto object-contain"
-                        />
+                        <div className="md:hidden">
+                            <Logo showText={false} className="scale-75" />
+                        </div>
                         <div>
-                            <div className="flex items-center gap-3 mb-2">
-                              <img 
-                                src="https://storage.googleapis.com/static.aistudio.google.com/artifacts/ef9231f8-084a-49ae-a01f-0e1ce0743bba/input_file_0.png" 
-                                alt="KHAANTEEN Logo"
-                                className="hidden md:block h-20 w-auto object-contain"
-                              />
-                              <h1 className="text-3xl md:text-4xl font-display font-black text-gray-900 leading-tight">Admin</h1>
+                            <div className="flex items-center gap-4 mb-2">
+                                <Logo className="hidden md:flex scale-125 origin-left" />
+                                <h1 className="text-3xl md:text-4xl font-display font-black text-gray-900 leading-tight">Admin</h1>
                             </div>
-                            <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-2">Real-time Management Portal</p>
+                            <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-2 px-2">Real-time Management Portal</p>
                         </div>
                     </div>
             <div className="flex items-center gap-4">
@@ -460,14 +485,14 @@ export const AdminDashboard: React.FC = () => {
                 <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-[40px] border border-gray-50 shadow-xl shadow-gray-200/40 min-h-[300px] sm:h-[400px]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                          <h3 className="font-black text-gray-900 flex items-center gap-2">
-                             <TrendingUp size={18} className="text-[#E31E24]" />
+                             <TrendingUp size={18} className="text-[#007AFF]" />
                              Revenue Analytics
                          </h3>
                          <div className="flex gap-1 bg-gray-50 p-1 rounded-xl w-fit">
                              {['Day', 'Week', 'Month'].map(t => (
                                  <button key={t} className={cn(
                                      "text-[8px] sm:text-[10px] font-black px-3 sm:px-4 py-2 rounded-lg transition-all uppercase tracking-widest",
-                                     t === 'Week' ? "bg-[#E31E24] text-white shadow-sm" : "text-gray-300 hover:text-gray-900"
+                                     t === 'Week' ? "bg-white text-gray-900 shadow-sm" : "text-gray-300 hover:text-gray-900"
                                  )}>{t}</button>
                              ))}
                          </div>
@@ -477,8 +502,8 @@ export const AdminDashboard: React.FC = () => {
                             <AreaChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#E31E24" stopOpacity={0.1}/>
-                                        <stop offset="95%" stopColor="#E31E24" stopOpacity={0}/>
+                                        <stop offset="5%" stopColor="#007AFF" stopOpacity={0.1}/>
+                                        <stop offset="95%" stopColor="#007AFF" stopOpacity={0}/>
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
@@ -486,9 +511,9 @@ export const AdminDashboard: React.FC = () => {
                                 <YAxis stroke="#94A3B8" fontSize={8} axisLine={false} tickLine={false} fontWeight={900} />
                                 <Tooltip 
                                     contentStyle={{ backgroundColor: '#fff', border: 'none', borderRadius: '12px', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
-                                    itemStyle={{ color: '#E31E24', fontWeight: 900, fontSize: '10px' }}
+                                    itemStyle={{ color: '#007AFF', fontWeight: 900, fontSize: '10px' }}
                                 />
-                                <Area type="monotone" dataKey="sales" stroke="#E31E24" fillOpacity={1} fill="url(#colorSales)" strokeWidth={3} />
+                                <Area type="monotone" dataKey="sales" stroke="#007AFF" fillOpacity={1} fill="url(#colorSales)" strokeWidth={3} />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>

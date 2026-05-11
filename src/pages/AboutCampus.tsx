@@ -33,9 +33,9 @@ export const AboutCampus: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="flex items-center justify-center gap-2 mb-6"
           >
-            <div className="h-px w-8 bg-[#E31E24]" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[#E31E24]">Parul University Goa</span>
-            <div className="h-px w-8 bg-[#E31E24]" />
+            <div className="h-px w-8 bg-brand-neon-blue" />
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-neon-blue">Parul University Goa</span>
+            <div className="h-px w-8 bg-brand-neon-blue" />
           </motion.div>
           
           <motion.h1
@@ -45,7 +45,7 @@ export const AboutCampus: React.FC = () => {
             className="text-6xl md:text-8xl font-display font-black text-gray-900 mb-8 tracking-tighter"
           >
             Campus Life <br /> 
-            <span className="text-[#E31E24]">Under the Palms.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00AEEF] to-[#2E3192]">Under the Palms.</span>
           </motion.h1>
           
           <motion.p
@@ -71,13 +71,13 @@ export const AboutCampus: React.FC = () => {
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                   <div className="absolute bottom-10 left-10 text-white">
-                    <div className="flex items-center gap-2 mb-2 text-red-500">
-                       <MapPin size={16} />
-                       <span className="text-[10px] font-black uppercase tracking-widest">South Goa Campus</span>
-                    </div>
-                    <h2 className="text-4xl font-display font-black tracking-tight">An Oasis of Learning.</h2>
-                 </div>
+                <div className="absolute bottom-10 left-10 text-white">
+                   <div className="flex items-center gap-2 mb-2 text-cyan-400">
+                      <MapPin size={16} />
+                      <span className="text-[10px] font-black uppercase tracking-widest">South Goa Campus</span>
+                   </div>
+                   <h2 className="text-4xl font-display font-black tracking-tight">An Oasis of Learning.</h2>
+                </div>
              </motion.div>
 
              <div className="space-y-8">
@@ -135,9 +135,9 @@ export const AboutCampus: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="p-8 bg-white rounded-[35px] border border-gray-100 shadow-xl flex flex-col items-center text-center group hover:border-red-200 transition-colors"
+                  className="p-8 bg-white rounded-[35px] border border-gray-100 shadow-xl flex flex-col items-center text-center group hover:border-cyan-200 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-[#E31E24] mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-500 mb-4 group-hover:scale-110 transition-transform">
                     {stat.icon}
                   </div>
                   <span className="block text-3xl font-display font-black text-gray-900 mb-1 tracking-tighter">{stat.value}</span>

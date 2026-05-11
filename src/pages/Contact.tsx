@@ -53,7 +53,7 @@ export const Contact: React.FC = () => {
                 transition={{ delay: 0.1 }}
                 className="text-5xl md:text-6xl font-display font-black text-gray-900 tracking-tighter mb-6"
               >
-                Let's <span className="text-[#E31E24]">Connect.</span>
+                Let's <span className="text-[#007AFF]">Connect.</span>
               </motion.h1>
               
               <motion.p

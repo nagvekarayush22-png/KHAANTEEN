@@ -4,7 +4,9 @@ import { Mail, Lock, ArrowRight, Shield, User as UserIcon, GraduationCap, Briefc
 import { Link, useNavigate } from "react-router-dom";
 import { cn } from "../lib/utils";
 
-type Role = "student" | "faculty" | "admin";
+type Role = "student" | "admin";
+
+import { Logo } from "../components/Logo";
 
 export const Login: React.FC = () => {
   const [role, setRole] = useState<Role>("student");
@@ -38,9 +40,8 @@ export const Login: React.FC = () => {
   };
 
   const roles: { id: Role, icon: React.ReactNode, label: string, color: string }[] = [
-    { id: "student", icon: <GraduationCap size={20} />, label: "Student", color: "bg-[#E31E24]" },
-    { id: "faculty", icon: <Briefcase size={20} />, label: "Faculty", color: "bg-[#8B0000]" },
-    { id: "admin", icon: <Shield size={20} />, label: "Admin", color: "bg-[#010816]" },
+    { id: "student", icon: <GraduationCap size={20} />, label: "USER", color: "bg-[#007AFF]" },
+    { id: "admin", icon: <Shield size={20} />, label: "ADMIN", color: "bg-[#010816]" },
   ];
 
   return (
@@ -84,7 +85,7 @@ export const Login: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-[#E31E24] font-black tracking-[0.4em] uppercase text-xs"
+              className="text-[#007AFF] font-black tracking-[0.4em] uppercase text-xs"
             >
               Syncing Smart Campus Profile...
             </motion.p>
@@ -107,28 +108,12 @@ export const Login: React.FC = () => {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="bg-white/90 backdrop-blur-3xl w-full max-w-md rounded-[48px] p-10 relative overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] border border-white"
       >
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#E31E24] via-red-950 to-[#E31E24] animate-shimmer" />
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#E31E24] via-[#007AFF] to-[#E31E24] animate-shimmer" />
         
-        <div className="text-center mb-10">
-          <motion.div 
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            className="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center mb-6 shadow-2xl shadow-gray-200/50 overflow-hidden border border-gray-50"
-          >
-            <img 
-              src="https://storage.googleapis.com/static.aistudio.google.com/artifacts/ef9231f8-084a-49ae-a01f-0e1ce0743bba/input_file_0.png" 
-              alt="Logo" 
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none';
-                const span = document.createElement('span');
-                span.className = 'text-white font-black text-3xl';
-                span.innerText = 'K';
-                e.currentTarget.parentElement?.appendChild(span);
-              }}
-            />
-          </motion.div>
-          <h2 className="text-4xl font-display font-black text-gray-900 mb-2 tracking-tight">Khaanteen</h2>
-          <p className="text-gray-400 font-bold text-sm tracking-tight uppercase">Smart Campus Access Portal</p>
+        <div className="flex flex-col items-center mb-10">
+          <Logo className="mb-6 scale-125" />
+          <h2 className="text-4xl font-display font-black text-gray-900 mb-2 tracking-tight">Access Portal</h2>
+          <p className="text-gray-400 font-bold text-[10px] tracking-widest uppercase">Smart Campus Dining Network</p>
         </div>
 
         {/* Role Selector */}
@@ -159,14 +144,14 @@ export const Login: React.FC = () => {
           <div className="space-y-2">
             <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-4">University ID / Email</label>
             <div className="relative group">
-              <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#E31E24] transition-colors" size={18} />
+              <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#007AFF] transition-colors" size={18} />
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="2103031234@paruluniversity.ac.in"
-                className="w-full bg-white border border-gray-100 rounded-2xl py-4.5 pl-14 pr-6 text-gray-900 placeholder:text-gray-200 focus:outline-none focus:border-[#E31E24]/50 focus:ring-4 focus:ring-red-50 transition-all text-sm font-bold shadow-sm"
+                className="w-full bg-white border border-gray-100 rounded-2xl py-4.5 pl-14 pr-6 text-gray-900 placeholder:text-gray-200 focus:outline-none focus:border-[#007AFF]/50 focus:ring-4 focus:ring-[#007AFF]/5 transition-all text-sm font-bold shadow-sm"
               />
             </div>
           </div>
@@ -174,14 +159,14 @@ export const Login: React.FC = () => {
           <div className="space-y-2">
             <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] pl-4">Access Key</label>
             <div className="relative group">
-              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#E31E24] transition-colors" size={18} />
+              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#007AFF] transition-colors" size={18} />
               <input 
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
-                className="w-full bg-white border border-gray-100 rounded-2xl py-4.5 pl-14 pr-6 text-gray-900 placeholder:text-gray-200 focus:outline-none focus:border-[#E31E24]/50 focus:ring-4 focus:ring-red-50 transition-all text-sm font-bold shadow-sm"
+                className="w-full bg-white border border-gray-100 rounded-2xl py-4.5 pl-14 pr-6 text-gray-900 placeholder:text-gray-200 focus:outline-none focus:border-[#007AFF]/50 focus:ring-4 focus:ring-[#007AFF]/5 transition-all text-sm font-bold shadow-sm"
               />
             </div>
           </div>
@@ -205,7 +190,7 @@ export const Login: React.FC = () => {
         </form>
 
         <div className="mt-12 flex flex-col items-center gap-6">
-            <Link to="#" className="text-[10px] font-black text-gray-300 hover:text-[#E31E24] transition-colors uppercase tracking-widest decoration-1 underline underline-offset-4">
+            <Link to="#" className="text-[10px] font-black text-gray-300 hover:text-[#007AFF] transition-colors uppercase tracking-widest decoration-1 underline underline-offset-4">
                 Forgot password?
             </Link>
             <div className="flex items-center gap-4 w-full">
