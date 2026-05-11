@@ -1,11 +1,17 @@
-<div align="center">
+# PU Goa Smart E-Canteen
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+This is a futuristic, AI-powered smart canteen ecosystem built for a hackathon.
 
-  <h1>Built with AI Studio</h2>
+## Tech Stack
+- **Frontend**: React 19, Framer Motion, Tailwind CSS 4, Recharts
+- **Backend**: Node.js, Express, Socket.io
+- **AI**: Google Gemini API
+- **Deployment**: Cloud Run (via AI Studio)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
-
-  <a href="https://aistudio.google.com/apps">Start building</a>
-
-</div>
+## Features
+- Immersive Goa Beach Atmosphere
+- Smart Meal Recommendations (Gemini AI)
+- Role-based Access (Student, Faculty, Admin)
+- Real-time Order Tracking
+- Futuristic Admin Analytics Dashboard
+- Live Crowd Status Indicator
