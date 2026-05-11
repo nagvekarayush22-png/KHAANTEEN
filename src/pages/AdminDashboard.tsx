@@ -113,7 +113,7 @@ export const AdminDashboard: React.FC = () => {
 
   const stats = [
     { label: "Daily Revenue", value: "₹42,850", change: "+12.5%", icon: <DollarSign size={20} className="text-green-500" />, trend: "up" },
-    { label: "Active Orders", value: "24", change: "+4", icon: <ShoppingBag size={20} className="text-blue-500" />, trend: "up" },
+    { label: "Active Orders", value: "24", change: "+4", icon: <ShoppingBag size={20} className="text-red-500" />, trend: "up" },
     { label: "Total Students", value: "1,450", change: "+2%", icon: <Users size={20} className="text-orange-500" />, trend: "up" },
     { label: "Stock Alerts", value: "8 Low", change: "-2", icon: <Package size={20} className="text-[#E31E24]" />, trend: "down" },
   ];
@@ -179,7 +179,7 @@ export const AdminDashboard: React.FC = () => {
                 {/* ... existing POS system view ... */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">POS<br /><span className="text-[#007AFF]">System.</span></h1>
+                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">POS<br /><span className="text-[#E31E24]">System.</span></h1>
                         <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-2">Direct Terminal Ordering</p>
                     </div>
                 </div>
@@ -204,23 +204,23 @@ export const AdminDashboard: React.FC = () => {
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                             {MENU_ITEMS.filter(item => posCategory === 'All' || item.category === posCategory).map(item => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => addToPosCart(item)}
-                                    className="bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-gray-100 text-left hover:border-[#007AFF]/30 transition-all group shadow-sm hover:shadow-xl min-w-0"
-                                >
-                                    <div className="flex justify-between items-start mb-3 sm:mb-4">
-                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-all overflow-hidden border border-gray-100 shrink-0">
-                                            <img src={item.image} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                    <button
+                                        key={item.id}
+                                        onClick={() => addToPosCart(item)}
+                                        className="bg-white p-3 sm:p-4 rounded-2xl sm:rounded-3xl border border-gray-100 text-left hover:border-[#E31E24]/30 transition-all group shadow-sm hover:shadow-xl min-w-0"
+                                    >
+                                        <div className="flex justify-between items-start mb-3 sm:mb-4">
+                                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-all overflow-hidden border border-gray-100 shrink-0">
+                                                <img src={item.image} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                                            </div>
+                                            <Plus size={14} className="text-gray-200 group-hover:text-[#E31E24]" />
                                         </div>
-                                        <Plus size={14} className="text-gray-200 group-hover:text-[#007AFF]" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <span className="block text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 truncate">{item.category}</span>
-                                        <h4 className="text-xs sm:text-sm font-black text-gray-900 mb-1 truncate leading-tight">{item.name}</h4>
-                                        <span className="text-[#007AFF] font-black text-[10px] sm:text-xs">₹{item.price}</span>
-                                    </div>
-                                </button>
+                                        <div className="min-w-0">
+                                            <span className="block text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 truncate">{item.category}</span>
+                                            <h4 className="text-xs sm:text-sm font-black text-gray-900 mb-1 truncate leading-tight">{item.name}</h4>
+                                            <span className="text-[#E31E24] font-black text-[10px] sm:text-xs">₹{item.price}</span>
+                                        </div>
+                                    </button>
                             ))}
                         </div>
                     </div>
@@ -248,7 +248,7 @@ export const AdminDashboard: React.FC = () => {
                                         </div>
                                         <div className="flex-1">
                                             <h5 className="text-xs font-black text-gray-900">{item.name}</h5>
-                                            <span className="text-[10px] font-black text-[#007AFF]">₹{item.price} x {quantity}</span>
+                                            <span className="text-[10px] font-black text-[#E31E24]">₹{item.price} x {quantity}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <button onClick={() => updatePosQty(item.id, -1)} className="p-1 hover:bg-gray-50 rounded-lg text-gray-400"><Minus size={14} /></button>
@@ -268,7 +268,7 @@ export const AdminDashboard: React.FC = () => {
                                     value={studentId}
                                     onChange={(e) => setStudentId(e.target.value)}
                                     placeholder="Enter Student ID..." 
-                                    className="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-black text-gray-900 focus:ring-2 ring-[#007AFF]/20" 
+                                    className="w-full bg-gray-50 border-none rounded-2xl py-4 pl-12 pr-4 text-sm font-black text-gray-900 focus:ring-2 ring-red-100/50" 
                                 />
                             </div>
 
@@ -280,7 +280,7 @@ export const AdminDashboard: React.FC = () => {
                             <button 
                                 onClick={handlePlaceOrder}
                                 disabled={posCart.length === 0}
-                                className="w-full py-5 bg-[#007AFF] text-white rounded-[24px] font-black text-sm uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
+                                className="w-full py-5 bg-[#E31E24] text-white rounded-[24px] font-black text-sm uppercase tracking-widest shadow-xl shadow-red-500/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
                             >
                                 Confirm & Print Receipt
                             </button>
@@ -292,7 +292,7 @@ export const AdminDashboard: React.FC = () => {
             <div className="flex flex-col gap-8">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">Order<br /><span className="text-[#007AFF]">History.</span></h1>
+                        <h1 className="text-4xl font-display font-black text-gray-900 leading-tight">Order<br /><span className="text-[#E31E24]">History.</span></h1>
                         <p className="text-gray-400 font-bold text-xs uppercase tracking-widest mt-2">Comprehensive Record of Sales</p>
                     </div>
                     
@@ -349,7 +349,7 @@ export const AdminDashboard: React.FC = () => {
                                         >
                                             <div className="flex items-center gap-2">
                                                 {col.label}
-                                                <ArrowUpDown size={12} className={cn(sortConfig?.key === col.key ? "text-[#007AFF]" : "text-gray-200")} />
+                                                <ArrowUpDown size={12} className={cn(sortConfig?.key === col.key ? "text-[#E31E24]" : "text-gray-200")} />
                                             </div>
                                         </th>
                                     ))}
@@ -359,10 +359,10 @@ export const AdminDashboard: React.FC = () => {
                                 {filteredOrders.length > 0 ? (
                                     filteredOrders.map((order, i) => (
                                         <tr key={i} className="group hover:bg-gray-50/50 transition-colors">
-                                            <td className="px-8 py-6 font-black text-sm text-[#007AFF]">{order.id}</td>
+                                            <td className="px-8 py-6 font-black text-sm text-[#E31E24]">{order.id}</td>
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 rounded-full bg-[#007AFF]/5 flex items-center justify-center font-black text-[10px] text-[#007AFF] border border-[#007AFF]/10">
+                                                    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center font-black text-[10px] text-[#E31E24] border border-red-100">
                                                         {order.studentName[0]}
                                                     </div>
                                                     <span className="text-sm font-black text-gray-900">{order.studentName}</span>
@@ -460,14 +460,14 @@ export const AdminDashboard: React.FC = () => {
                 <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-[40px] border border-gray-50 shadow-xl shadow-gray-200/40 min-h-[300px] sm:h-[400px]">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                          <h3 className="font-black text-gray-900 flex items-center gap-2">
-                             <TrendingUp size={18} className="text-[#007AFF]" />
+                             <TrendingUp size={18} className="text-[#E31E24]" />
                              Revenue Analytics
                          </h3>
                          <div className="flex gap-1 bg-gray-50 p-1 rounded-xl w-fit">
                              {['Day', 'Week', 'Month'].map(t => (
                                  <button key={t} className={cn(
                                      "text-[8px] sm:text-[10px] font-black px-3 sm:px-4 py-2 rounded-lg transition-all uppercase tracking-widest",
-                                     t === 'Week' ? "bg-white text-gray-900 shadow-sm" : "text-gray-300 hover:text-gray-900"
+                                     t === 'Week' ? "bg-[#E31E24] text-white shadow-sm" : "text-gray-300 hover:text-gray-900"
                                  )}>{t}</button>
                              ))}
                          </div>
@@ -477,8 +477,8 @@ export const AdminDashboard: React.FC = () => {
                             <AreaChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#007AFF" stopOpacity={0.1}/>
-                                        <stop offset="95%" stopColor="#007AFF" stopOpacity={0}/>
+                                        <stop offset="5%" stopColor="#E31E24" stopOpacity={0.1}/>
+                                        <stop offset="95%" stopColor="#E31E24" stopOpacity={0}/>
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
@@ -486,9 +486,9 @@ export const AdminDashboard: React.FC = () => {
                                 <YAxis stroke="#94A3B8" fontSize={8} axisLine={false} tickLine={false} fontWeight={900} />
                                 <Tooltip 
                                     contentStyle={{ backgroundColor: '#fff', border: 'none', borderRadius: '12px', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }}
-                                    itemStyle={{ color: '#007AFF', fontWeight: 900, fontSize: '10px' }}
+                                    itemStyle={{ color: '#E31E24', fontWeight: 900, fontSize: '10px' }}
                                 />
-                                <Area type="monotone" dataKey="sales" stroke="#007AFF" fillOpacity={1} fill="url(#colorSales)" strokeWidth={3} />
+                                <Area type="monotone" dataKey="sales" stroke="#E31E24" fillOpacity={1} fill="url(#colorSales)" strokeWidth={3} />
                             </AreaChart>
                         </ResponsiveContainer>
                     </div>

@@ -1,52 +1,34 @@
-import { motion } from "motion/react";
-import React from "react";
-import { cn } from "../lib/utils";
+import React from 'react';
+import { motion } from 'framer-motion';
 
 export const BeachBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden bg-[#010816]">
-      {/* Cinematic Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#010816] via-[#021027] to-[#0a1b3d]" />
+    <div className="absolute inset-0 z-0 overflow-hidden select-none pointer-events-none">
+      {/* Sun/Light Glow */}
+      <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-yellow-200/20 blur-[120px] rounded-full animate-pulse" />
       
-      {/* Immersive Campus Visual Gradient */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=2836&auto=format&fit=crop')] bg-cover bg-center opacity-[0.12] scale-105" />
+      {/* Wave Layers */}
+      <motion.div 
+        animate={{ 
+          x: [-20, 20, -20],
+          rotate: [0, 1, 0]
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[-20%] left-[-10%] w-[120%] h-[40%] bg-blue-100/30 blur-[60px] rounded-full transform -rotate-2"
+      />
+      
+      <motion.div 
+        animate={{ 
+          x: [20, -20, 20],
+          rotate: [0, -1, 0]
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-[-25%] left-[-10%] w-[130%] h-[45%] bg-cyan-100/20 blur-[80px] rounded-full transform rotate-1"
+      />
 
-      {/* Animated Light Rays */}
-      <div className="absolute top-0 left-1/4 w-[1px] h-full bg-gradient-to-b from-brand-neon-blue/20 to-transparent rotate-[20deg] blur-sm animate-pulse" />
-      <div className="absolute top-0 right-1/4 w-[1px] h-full bg-gradient-to-b from-brand-red/20 to-transparent -rotate-[15deg] blur-sm animate-pulse delay-700" />
-      
-      {/* Floating Particles (Enhanced) */}
-      {[...Array(40)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{ 
-            x: Math.random() * 100 + "%", 
-            y: Math.random() * 100 + "%",
-            opacity: Math.random() * 0.5
-          }}
-          animate={{ 
-            y: [null, "-20%"],
-            x: [null, (Math.random() - 0.5) * 20 + "%"],
-            opacity: [0, 0.4, 0]
-          }}
-          transition={{ 
-            duration: Math.random() * 20 + 20, 
-            repeat: Infinity, 
-            ease: "linear" 
-          }}
-          className={cn(
-            "absolute w-[2px] h-[2px] rounded-full blur-[1px]",
-            i % 3 === 0 ? "bg-brand-neon-blue" : i % 3 === 1 ? "bg-brand-red" : "bg-white"
-          )}
-        />
-      ))}
-
-      {/* Dynamic Ambient Blur */}
-      <div className="absolute -bottom-20 -left-20 w-[600px] h-[600px] bg-brand-neon-blue/5 blur-[150px] rounded-full" />
-      <div className="absolute -top-20 -right-20 w-[600px] h-[600px] bg-brand-red/5 blur-[150px] rounded-full" />
-      
-      {/* Noise Texture for that Cinematic look */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      {/* Tropical Accents (Abstract shapes representing leaves) */}
+      <div className="absolute top-[20%] left-[-5%] w-64 h-64 bg-green-200/10 blur-[60px] rounded-full" />
+      <div className="absolute top-[60%] right-[-5%] w-80 h-80 bg-green-300/5 blur-[70px] rounded-full" />
     </div>
   );
 };

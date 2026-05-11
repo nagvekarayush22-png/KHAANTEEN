@@ -1,4 +1,4 @@
-import FloatingActionMenu from "@/src/components/ui/floating-action-menu"
+import FloatingActionMenu from "./ui/floating-action-menu"
 import { ShoppingBag, Wallet, History, LifeBuoy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
